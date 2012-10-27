@@ -139,6 +139,14 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'/strong',
 					'/blockquote'
 				)
+			),/* removing the last > by '> still'
+			'blockquote_quote_skips_>' => array(
+				"> Have \"> \n%s > another\n> still\" here",
+				array(
+					array('blockquote' => array()),
+						"Have \"> \nSome text > another\n > still\" here",
+					'/blockquote'
+				)
 			), /* does not render li
 			'blockquote_li' => array(
 				'> - %s',
@@ -729,6 +737,13 @@ class TextTest extends PHPUnit_Framework_TestCase {
 	 * Important: This function is very forgiving about whitespace and also accepts any
 	 * permutation of attribute order. It will also allow whitespace between specified tags.
 	 *
+	 * Taken from the CakePHP framework test suite.
+	 *
+	 * @link https://github.com/cakephp/cakephp/blob/master/lib/Cake/TestSuite/CakeTestCase.php
+	 * @link http://cakephp.org
+	 * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+	 * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+	 *
 	 * @param string $string An HTML/XHTML/XML string
 	 * @param array $expected An array, see above
 	 * @param string $message SimpleTest failure output string
@@ -863,6 +878,13 @@ class TextTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Generates all permutation of an array $items and returns them in a new array.
+	 *
+	 * Taken from the CakePHP framework test suite.
+	 *
+	 * @link https://github.com/cakephp/cakephp/blob/master/lib/Cake/TestSuite/CakeTestCase.php
+	 * @link http://cakephp.org
+	 * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+	 * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
 	 *
 	 * @param array $items An array of items
 	 * @return array

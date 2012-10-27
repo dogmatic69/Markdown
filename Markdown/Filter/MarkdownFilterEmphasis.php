@@ -53,7 +53,7 @@ class MarkdownFilterEmphasis extends MarkdownFilter {
 		$text = preg_replace(
 			'/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
 			'<strong>$2</strong>',
-		$text
+			$text
 		);
 
 		// emphasis

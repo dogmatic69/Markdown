@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * Copyright (C) 2011, Maxim S. Tsepkov
  *
@@ -21,25 +21,23 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Translates ### style headers.
+ * Translates & and &lt; to &amp;amp; and &amp;lt;
  *
  * Definitions:
  * <ul>
- *   <li>use 1-6 hash characters at the start of the line</li>
- *   <li>number of opening hashes determines the header level</li>
- *   <li>closing hashes don’t need to match the number of hashes used to open</li>
+ *   <li>Transform & to &amp;amp; and < to &amp;lt;</li>
+ *   <li>do NOT transform if & is part of html entity, e.g. &amp;copy;</li>
+ *   <li>do NOT transform < if it's part of html tag</li>
+ *   <li>ALWAYS transfrom & and < within code spans and blocks</li>
  * </ul>
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_HeaderAtx extends Markdown_Filter
-{
+class MarkdownFilterEntities extends MarkdownFilter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -47,26 +45,25 @@ class Markdown_Filter_HeaderAtx extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
+    public function filter($text) {
+        // always escape within code blocks and spans
         $text = preg_replace_callback(
-            '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
-            array($this, 'transformHeaderAtx'),
+            array('/^( {4,}|\t+).*?$/mu',
+                  '/(?<!\\\\)`.*?(?<!\\\\)`/u'
+            ),
+            function ($match) {
+                return htmlspecialchars($match[0], ENT_NOQUOTES);
+            },
             $text
         );
+
+        // escape & outside of html entity
+        $text = preg_replace('/&(?![A-z]+;)/u', '&amp;', $text);
+
+        // escape < outside of html tag
+        $text = preg_replace('/<(?![A-z\\/])/u', '&lt;', $text);
 
         return $text;
     }
 
-    /**
-     * Takes a single markdown header and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderAtx($values)
-    {
-        $level = min(strlen($values['level']), 6);
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
-    }
 }

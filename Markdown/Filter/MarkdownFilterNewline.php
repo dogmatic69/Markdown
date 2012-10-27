@@ -21,52 +21,19 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Translates ==== style headers.
+ * Translate Win and Mac lineendings to UNIX.
  *
- * Definitions:
- * <ul>
- *   <li>first-level headers are "underlined" using =</li>
- *   <li>second-level headers are "underlined" using -</li>
- *   <li>any number of underlining =’s or -’s will work.</li>
- * </ul>
+ * This filter must be first in the chain, since others may rely on it.
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_HeaderSetext extends Markdown_Filter
-{
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text)
-    {
-        $text = preg_replace_callback(
-            '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
-            array($this, 'transformHeaderSetext'),
-            $text
-        );
-        return $text;
+class MarkdownFilterNewline extends MarkdownFilter {
+    public function filter($text) {
+        return str_replace(array("\r\n", "\r"), "\n", $text);
     }
-
-    /**
-     * Takes a single markdown header
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderSetext($values)
-    {
-        $level = $values['level'] == '=' ? 1 : 2;
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
-    }
+	
 }

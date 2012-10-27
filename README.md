@@ -26,10 +26,10 @@ _Filter_ is responsible for actual transformation.
 
 In most cases, _Text_ is enough for simple usage.
 
-    require_once 'Markdown/Text.php';
+    require_once 'Markdown/MarkdownText.php';
 
     // create an instance
-    $text = new Markdown_Text();
+    $text = new MarkdownText();
 
     // set plaintext
     $text->setMarkdown($markdown);
@@ -47,21 +47,21 @@ In most cases, _Text_ is enough for simple usage.
 Advanced usage
 ==============
 
-Internally, _Filter_ uses a set of filters which extends Markdown_Filter.
+Internally, _Filter_ uses a set of filters which extends MarkdownFilter.
 A filter is an object which can accept markdown text and return html.
 You can write your own filters and use like this:
 
     $filters = array(
         'Linebreak',            // a built-in filter
-        new MyCustomFilter(),   // child of Markdown_Filter
+        new MyCustomFilter(),   // child of MarkdownFilter
     );
-    Markdown_Filter::setDefaultFilters($filters);
+    MarkdownFilter::setDefaultFilters($filters);
 
     // all transformations now use the custom filter
     echo new Markdown_Text('**Markdown is great!**');
 
     // you can get current filters set
-    Markdown_Filter::getDefaultFilters();
+    MarkdownFilter::getDefaultFilters();
 
 
 Requirements

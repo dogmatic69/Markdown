@@ -21,52 +21,51 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../Markdown/MarkdownText.php';
 
-require_once __DIR__ . '/../Markdown/Text.php';
-
-class FilterTest extends PHPUnit_Framework_TestCase
-{
+class FilterTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFactoryNonAlnum()
-    {
-        Markdown_Filter::factory('/etc/passwd');
+    public function testFactoryNonAlnum() {
+        MarkdownFilter::factory('/etc/passwd');
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFactoryNonExistent()
-    {
-        Markdown_Filter::factory('suchfilterdoesntexists');
+    public function testFactoryNonExistent() {
+        MarkdownFilter::factory('suchfilterdoesntexists');
     }
 
-    public function testFactory()
-    {
-        $this->assertInstanceOf('Markdown_Filter', Markdown_Filter::factory('Hr'));
+	/**
+	 * Test the classes are correctly loaded
+	 */
+    public function testFactory() {
+        $this->assertInstanceOf('MarkdownFilter', MarkdownFilter::factory('Hr'));
     }
 
-    public function testGetDefaultFiltersNonEmpty()
-    {
-        $this->assertNotEmpty(Markdown_Filter::getDefaultFilters());
+	/**
+	 * Check default filters are not empty
+	 */
+    public function testGetDefaultFiltersNonEmpty() {
+        $this->assertNotEmpty(MarkdownFilter::getDefaultFilters());
     }
 
     /**
      * @depends testGetDefaultFiltersNonEmpty
      */
-    public function testSetDefaultFilters()
-    {
+    public function testSetDefaultFilters() {
         $filters = array('Linebreak', 'Hr');
-        Markdown_Filter::setDefaultFilters($filters);
-        $this->assertEquals(Markdown_Filter::getDefaultFilters(), $filters);
+        MarkdownFilter::setDefaultFilters($filters);
+        $this->assertEquals(MarkdownFilter::getDefaultFilters(), $filters);
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testRunWithInvalidFiltersParameter()
-    {
-        Markdown_Filter::run('', array('Filter', 1, false, true));
+    public function testRunWithInvalidFiltersParameter() {
+        MarkdownFilter::run('', array('Filter', 1, false, true));
     }
+
 }

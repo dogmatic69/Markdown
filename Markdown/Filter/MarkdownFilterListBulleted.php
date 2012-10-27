@@ -21,15 +21,12 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Translates linebreaks.
+ * Translates bulleted lists.
  *
  * Definitions:
  * <ul>
- *   <li>linebreak is indicated by two or more spaces and (\n)
- *      at the end of line</li>
+ *   <li>asterisks, pluses, and hyphens — interchangably — as list markers</li>
  * </ul>
  *
  * @package Markdown
@@ -37,17 +34,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Linebreak extends Markdown_Filter
-{
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text)
-    {
-        return preg_replace('/ {2,}\n/', '<br />', $text);
-    }
+class MarkdownFilterListBulleted extends MarkdownFilterList {
+    protected $_listType = 'ul';
+    protected $_markers = '(?:[*+-])';
 }

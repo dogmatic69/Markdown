@@ -21,8 +21,6 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
  * Translates paragraphs.
  *
@@ -40,8 +38,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_Paragraph extends Markdown_Filter
-{
+class MarkdownFilterParagraph extends Markdown_Filter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -49,20 +46,18 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
+    public function filter($text) {
         $result = '';
 
         // split by empty lines to match paragraphs
         foreach(preg_split('/\n\s*\n/', $text) as $snippet) {
             $snippet = trim($snippet, "\n");
+			$template = "%s\n";
             if (self::isParagraph($snippet)) {
-                $result .= '<p>' . $snippet . '</p>';
+				$template = "<p>%s</p>\n";
             }
-            else {
-                $result .= $snippet;
-            }
-            $result .= "\n\n";
+
+            $result .= sprintf($template, $snippet);
         }
 
         return rtrim($result, "\n") . "\n";
@@ -80,8 +75,7 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
      * @param string $text
      * @return bool
      */
-    protected static function isParagraph($text)
-    {
+    protected static function isParagraph($text) {
         if (strlen($text) > 0) {
             // should not be indented
             if (!preg_match('/^\s/', $text)) {
@@ -95,4 +89,5 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
 
         return false;
     }
+	
 }

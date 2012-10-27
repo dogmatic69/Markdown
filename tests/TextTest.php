@@ -21,15 +21,23 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Markdown/Text.php';
+require_once __DIR__ . '/../Markdown/MarkdownText.php';
 
-class TextTest extends PHPUnit_Framework_TestCase
-{
+class TextTest extends PHPUnit_Framework_TestCase {
+	/**
+	 * @brief markdown
+	 *
+	 * @var array
+	 */
     protected static $_md   = array();
+
+	/**
+	 * html
+	 * @var array
+	 */
     protected static $_html = array();
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         $mds = glob(__DIR__ . '/data/*.md');
         foreach($mds as $filename) {
             $key = basename($filename, '.md');
@@ -43,16 +51,15 @@ class TextTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testConstruct()
-    {
-        $text = new Markdown_Text(self::$_md['syntax']);
+    public function testConstruct() {
+        $text = new MarkdownText(self::$_md['syntax']);
         $this->assertEquals(self::$_md['syntax'], $text->getMarkdown());
     }
 
-    public function testSetGetMarkdown()
-    {
-        $text = new Markdown_Text();
+    public function testSetGetMarkdown() {
+        $text = new MarkdownText();
         $text->setMarkdown(self::$_md['basics']);
         $this->assertEquals(self::$_md['basics'], $text->getMarkdown());
     }
+
 }

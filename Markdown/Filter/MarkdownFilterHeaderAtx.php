@@ -21,16 +21,14 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Translates horizontal rules.
+ * Translates ### style headers.
  *
  * Definitions:
  * <ul>
- *   <li>horizontal rule produced by placing three or more
- *      hyphens, asterisks, or underscores on a line by themselves</li>
- *   <li>spaces can be used between the hyphens or asterisks</li>
+ *   <li>use 1-6 hash characters at the start of the line</li>
+ *   <li>number of opening hashes determines the header level</li>
+ *   <li>closing hashes don’t need to match the number of hashes used to open</li>
  * </ul>
  *
  * @package Markdown
@@ -38,8 +36,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Hr extends Markdown_Filter
-{
+class MarkdownFilterHeaderAtx extends MarkdownFilter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -47,12 +44,25 @@ class Markdown_Filter_Hr extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
-        return preg_replace(
-            '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
-            "\n<hr />\n",
+    public function filter($text) {
+        $text = preg_replace_callback(
+            '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
+            array($this, 'transformHeaderAtx'),
             $text
         );
+
+        return $text;
     }
+
+    /**
+     * Takes a single markdown header and returns its html equivalent.
+     *
+     * @param array
+     * @return string
+     */
+    protected function transformHeaderAtx($values) {
+        $level = min(strlen($values['level']), 6);
+        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
+    }
+
 }

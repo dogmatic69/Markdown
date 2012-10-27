@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * Copyright (C) 2011, Maxim S. Tsepkov
  *
@@ -21,25 +21,18 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/Link.php';
-
 /**
- * Translates images.
+ * Removes backslashes (\) before special symbols.
  *
- * Definitions:
- * <ul>
- *   <li>image syntax is resemble the syntax for links
- *      but with an exclamation mark (!) before first bracket</li>
- *   <li>brackets contain alt attribute</li>
- *   <li>Markdown has no syntax for specifying the dimensions of an image</li>
- * </ul>
+ * This filter should be run latest,
+ * to let other filters be aware of backslashes.
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_Img extends Markdown_Filter_Link
+class MarkdownFilterUnescape extends MarkdownFilter
 {
     /**
      * Pass given text through the filter and return result.
@@ -48,10 +41,12 @@ class Markdown_Filter_Img extends Markdown_Filter_Link
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
-        $this->_mark = '!';
-        $this->_format = '<img src="%s"%s alt="%s" />';
-        return parent::filter($text);
+    public function filter($text) {
+        return preg_replace(
+            '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
+            '$1',
+            $text
+        );
     }
+	
 }

@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/Filter.php';
+require_once __DIR__ . '/MarkdownFilter.php';
 
 /**
  * Represents a piece of text which can be both markdown and html.
@@ -31,16 +31,17 @@ require_once __DIR__ . '/Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Text
-{
+class MarkdownText {
     /**
-     *
+     * Internal cache of the markdown
+	 *
      * @var string
      */
     protected $_markdown;
 
     /**
-     *
+     * Internal cache of the html
+	 *
      * @var string
      */
     protected $_html;
@@ -49,48 +50,46 @@ class Markdown_Text
      *
      * @param string $markdown
      */
-    public function __construct($markdown = '')
-    {
+    public function __construct($markdown = '') {
         $this->setMarkdown($markdown);
     }
 
-    public function __toString()
-    {
-        return $this->getHtml();
-    }
-
     /**
-     *
+     * Get the html
+	 *
+	 * If not already converted, the markdown will be converted to html
+	 *
      * @return string
      */
-    public function getHtml()
-    {
+    public function getHtml() {
         if ($this->_html === null) {
-            $this->_html = Markdown_Filter::run($this->getMarkdown());
+            $this->_html = MarkdownFilter::run($this->getMarkdown());
         }
 
         return $this->_html;
     }
 
     /**
-     *
+     * Get the markdown
+	 *
      * @return string
      */
-    public function getMarkdown()
-    {
+    public function getMarkdown() {
         return $this->_markdown;
     }
 
     /**
-     *
-     * @param string $markdown
-     * @return Markdown_Text
+     * Set the markdown
+	 *
+	 * If the markdown is the same as what has been set previously nothing is done
+	 *
+     * @param string $markdown the markdown to be converted
+	 *
+     * @return MarkdownText
      */
-    public function setMarkdown($markdown)
-    {
-        $markdown = (string) $markdown;
+    public function setMarkdown($markdown) {
+        $markdown = (string)$markdown;
 
-        // do not flush html cache if nothing is changed
         if ($markdown !== $this->_markdown) {
             $this->_markdown = $markdown;
             $this->_html     = null;
@@ -98,4 +97,5 @@ class Markdown_Text
 
         return $this;
     }
+
 }

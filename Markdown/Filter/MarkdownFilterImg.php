@@ -21,14 +21,15 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/List.php';
-
 /**
- * Translates bulleted lists.
+ * Translates images.
  *
  * Definitions:
  * <ul>
- *   <li>asterisks, pluses, and hyphens — interchangably — as list markers</li>
+ *   <li>image syntax is resemble the syntax for links
+ *      but with an exclamation mark (!) before first bracket</li>
+ *   <li>brackets contain alt attribute</li>
+ *   <li>Markdown has no syntax for specifying the dimensions of an image</li>
  * </ul>
  *
  * @package Markdown
@@ -36,8 +37,18 @@ require_once __DIR__ . '/List.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_ListBulleted extends Markdown_Filter_List
-{
-    protected $_listType = 'ul';
-    protected $_markers = '(?:[*+-])';
+class MarkdownFilterImg extends MarkdownFilterLink {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
+    public function filter($text) {
+        $this->_mark = '!';
+        $this->_format = '<img src="%s"%s alt="%s" />';
+        return parent::filter($text);
+    }
+	
 }

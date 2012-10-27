@@ -31,10 +31,10 @@
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-abstract class Markdown_Filter
-{
+abstract class MarkdownFilter {
     /**
-     *
+     * Default filters
+	 *
      * @var array
      */
     protected static $_defaultFilters = array(
@@ -78,56 +78,53 @@ abstract class Markdown_Filter
     );
 
     /**
-     * Lookup Markdown_Filter_{$filtername} class and return its instance.
-     *
-     * @throws InvalidArgumentException
+     * Lookup MarkdownFilter{$filtername} class and return its instance.
+	 *
      * @param string $filtername
+     *
      * @return Markdown_Filter
+	 *
+     * @throws InvalidArgumentException
      */
-    public static function factory($filtername)
-    {
+    public static function factory($filtername) {
         if (is_string($filtername) && ctype_alnum($filtername)) {
-            $file  = __DIR__ . '/Filter/' . $filtername . '.php';
-            $class = 'Markdown_Filter_'   . $filtername;
+            $class = 'MarkdownFilter'   . $filtername;
+            $file  = __DIR__ . '/Filter/' . $class . '.php';
 
             if (is_readable($file)) {
                 require_once $file;
 
-                if (class_exists($class)) {
-                    return new $class;
-                }
-                else {
+                if (!class_exists($class)) {
                     throw new InvalidArgumentException(
                         'Could not find class ' . $class
                     );
                 }
+				return new $class;
             }
-            else {
-                throw new InvalidArgumentException($file . ' is not readable');
-            }
+            throw new InvalidArgumentException($file . ' is not readable');
         }
-        else {
-            throw new InvalidArgumentException(sprintf(
-                '$filtername must be an alphanumeric string, <%s> given.',
-                gettype($filtername)
-            ));
-        }
+
+		throw new InvalidArgumentException(sprintf(
+			'$filtername must be an alphanumeric string, <%s> given.',
+			gettype($filtername)
+		));
     }
 
     /**
+	 * Get the default filters
+	 *
      * @return array
      */
-    public static function getDefaultFilters()
-    {
+    public static function getDefaultFilters() {
         return self::$_defaultFilters;
     }
 
     /**
-     * @param array $filters
-     * @return Markdown_Filter
+	 * Set default filters
+	 *
+     * @param array $filters the filters to use
      */
-    public static function setDefaultFilters(array $filters)
-    {
+    public static function setDefaultFilters(array $filters) {
         self::$_defaultFilters = $filters;
     }
 
@@ -135,24 +132,21 @@ abstract class Markdown_Filter
      * Pass given $text through $filters chain and return result.
      * Use default filters in no $filters given.
      *
-     * @param string $text
-     * @param array $filters optional
+     * @param string $text the markdown text
+     * @param array $filters optional list of filters to run
+	 *
      * @return string
      */
-    public static function run($text, array $filters = null)
-    {
+    public static function run($text, array $filters = null){
         if ($filters === null) {
             $filters = self::getDefaultFilters();
         }
 
         foreach ($filters as $filter) {
-            if ($filter instanceof Markdown_Filter) {
-                // do nothing
-            }
-            elseif (is_string($filter)) {
+			if (is_string($filter)) {
                 $filter = self::factory($filter);
             }
-            else {
+            if (!$filter instanceof Markdown_Filter) {
                 throw new InvalidArgumentException(
                     '$filters must be an array which elements ' .
                     'is either a string or Markdown_Filter'
@@ -168,14 +162,14 @@ abstract class Markdown_Filter
     /**
      * Remove one level of indentation
      *
-     * @static
-     * @param string
+     * @param string text to outdent
+	 *
      * @return string
      */
-    protected static function outdent($text)
-    {
+    protected static function outdent($text) {
         return preg_replace('/^(\t| {1,4})/m', '', $text);
     }
 
     abstract public function filter($text);
+
 }

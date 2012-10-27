@@ -38,8 +38,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-abstract class Markdown_Filter_List extends Markdown_Filter
-{
+abstract class MarkdownFilterList extends Markdown_Filter {
     /**
      * Type of list
      *
@@ -61,9 +60,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
-
+    public function filter($text) {
         $text = preg_replace_callback(
             sprintf(
                 '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
@@ -95,8 +92,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      * @param string
      * @return string
      */
-    protected function transformListItems($text)
-    {
+    protected function transformListItems($text) {
         $text = rtrim($text, "\n");
         $text = preg_replace_callback(
             sprintf(

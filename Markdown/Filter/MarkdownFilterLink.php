@@ -41,8 +41,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Link extends Markdown_Filter
-{
+class MarkdownFilterLink extends Markdown_Filter {
     /**
      * Array with link definitions
      *
@@ -79,8 +78,7 @@ class Markdown_Filter_Link extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
+    public function filter($text) {
         $text = preg_replace_callback(
             '/^[ ]{0,3}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',
             array($this, 'extractLinkDefinitions'),
@@ -184,4 +182,5 @@ class Markdown_Filter_Link extends Markdown_Filter
     protected function encodeAttribute($text) {
         return str_replace('"', '&quot;', $text);
     }
+	
 }

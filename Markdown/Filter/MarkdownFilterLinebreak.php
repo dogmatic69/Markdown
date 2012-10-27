@@ -21,22 +21,30 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Translate Win and Mac lineendings to UNIX.
+ * Translates linebreaks.
  *
- * This filter must be first in the chain, since others may rely on it.
+ * Definitions:
+ * <ul>
+ *   <li>linebreak is indicated by two or more spaces and (\n)
+ *      at the end of line</li>
+ * </ul>
  *
  * @package Markdown
  * @subpackage Filter
- * @author Max Tsepkov <max@garygolden.me>
+ * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Newline extends Markdown_Filter
-{
-    public function filter($text)
-    {
-        return str_replace(array("\r\n", "\r"), "\n", $text);
+class MarkdownFilterLinebreak extends MarkdownFilter {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
+    public function filter($text) {
+        return preg_replace('/ {2,}\n/', '<br />', $text);
     }
+	
 }

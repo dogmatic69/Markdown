@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Copyright (C) 2011, Maxim S. Tsepkov
  *
@@ -21,21 +21,22 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
- * Removes backslashes (\) before special symbols.
+ * Translates ==== style headers.
  *
- * This filter should be run latest,
- * to let other filters be aware of backslashes.
+ * Definitions:
+ * <ul>
+ *   <li>first-level headers are "underlined" using =</li>
+ *   <li>second-level headers are "underlined" using -</li>
+ *   <li>any number of underlining =’s or -’s will work.</li>
+ * </ul>
  *
  * @package Markdown
  * @subpackage Filter
- * @author Max Tsepkov <max@garygolden.me>
+ * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Unescape extends Markdown_Filter
-{
+class MarkdownFilterHeaderSetext extends Markdown_Filter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -43,14 +44,27 @@ class Markdown_Filter_Unescape extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
-        $text = preg_replace(
-            '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
-            '$1',
+    public function filter($text) {
+        return preg_replace_callback(
+            '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
+            array($this, 'transformHeaderSetext'),
             $text
         );
-
-        return $text;
     }
+
+    /**
+     * Takes a single markdown header
+     * and returns its html equivalent.
+     *
+     * @param array
+     * @return string
+     */
+    protected function transformHeaderSetext($values) {
+        return sprintf(
+			"<h%1\$d>%2\$s</h%1\$d>\n\n",
+			$values['level'] == '=' ? 1 : 2,
+			$values['text']
+		);
+    }
+	
 }

@@ -21,8 +21,6 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
  * Translate code blocks and spans.
  *
@@ -48,8 +46,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Code extends Markdown_Filter
-{
+class MarkdownFilterCode extends MarkdownFilter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -57,8 +54,7 @@ class Markdown_Filter_Code extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
+    public function filter($text) {
         $text = preg_replace_callback(
             '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
             array($this, 'transformCodeBlock'),
@@ -80,8 +76,7 @@ class Markdown_Filter_Code extends Markdown_Filter
      * @param array
      * @return string
      */
-    protected function transformCodeBlock($values)
-    {
+    protected function transformCodeBlock($values) {
         $code = self::outdent($values['code']);
         $code = htmlspecialchars($code, ENT_NOQUOTES);
         $code = ltrim($code, "\n");
@@ -97,8 +92,7 @@ class Markdown_Filter_Code extends Markdown_Filter
      * @param array
      * @return string
      */
-    protected function transformCode($values)
-    {
+    protected function transformCode($values) {
         $code = trim($values['code'], " \t");
         $code = htmlspecialchars($code, ENT_NOQUOTES);
 

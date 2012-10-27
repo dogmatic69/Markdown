@@ -21,15 +21,14 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/List.php';
-
 /**
- * Translates numbered lists.
+ * Translates horizontal rules.
  *
  * Definitions:
  * <ul>
- *   <li>ordered lists use numbers followed by periods</li>
- *   <li>actual numbers in the list have no effect on the HTML output</li>
+ *   <li>horizontal rule produced by placing three or more
+ *      hyphens, asterisks, or underscores on a line by themselves</li>
+ *   <li>spaces can be used between the hyphens or asterisks</li>
  * </ul>
  *
  * @package Markdown
@@ -37,8 +36,20 @@ require_once __DIR__ . '/List.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_ListNumbered extends Markdown_Filter_List
-{
-    protected $_listType = 'ol';
-    protected $_markers = '(?:\d+\.)';
+class MarkdownFilterHr extends MarkdownFilter {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
+    public function filter($text) {
+        return preg_replace(
+            '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
+            "\n<hr />\n",
+            $text
+        );
+    }
+	
 }

@@ -21,8 +21,6 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
  * Translate email-style blockquotes.
  *
@@ -39,8 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_Blockquote extends Markdown_Filter
-{
+class MarkdownFilterBlockquote extends MarkdownFilter {
     /**
      * Pass given text through the filter and return result.
      *
@@ -48,8 +45,7 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
-    {
+    public function filter($text) {
         foreach($this->searchQuotes($text) as $quote) {
             $text = str_replace($quote, $this->transformQuote($quote), $text);
         }
@@ -63,8 +59,7 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
      * @param string $text
      * @return array $quotes
      */
-    protected function searchQuotes($text)
-    {
+    protected function searchQuotes($text) {
         $quotes = array();
 
         $inQuote = false;
@@ -72,9 +67,9 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
         for ($pos = 0; $pos < $len; $pos++) {
             if (!$inQuote) {
                 if ($text[$pos] == '>' && ($pos == 0 || $text[$pos-1] == "\n")) {
-                    $inQuote  = true;
+                    $inQuote = true;
                     $quotes[] = '';
-                    $quote    =& $quotes[count($quotes) - 1];
+                    $quote =& $quotes[count($quotes) - 1];
                 }
             }
 
@@ -98,8 +93,7 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
      * @param string
      * @return string
      */
-    protected function transformQuote($text)
-    {
+    protected function transformQuote($text) {
         $text = preg_replace('/^\s*>\s*/m', '', $text);
 
         foreach ($this->searchQuotes($text) as $quote) {
@@ -108,4 +102,5 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
 
         return "<blockquote>\n" . $text . "</blockquote>\n";
     }
+
 }

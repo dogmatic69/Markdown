@@ -3,15 +3,13 @@
  * Common class for all tests.
  */
 
-abstract class TestAbstract extends PHPUnit_Framework_TestCase
-{
+abstract class TestAbstract extends PHPUnit_Framework_TestCase {
     /**
      * Searches for files based on current class name.
      *
      * @return array
      */
-    public function filesystem()
-    {
+    public function filesystem() {
         $data = array();
 
         $classname = get_class($this);
@@ -37,4 +35,5 @@ abstract class TestAbstract extends PHPUnit_Framework_TestCase
 
         return $data;
     }
+	
 }

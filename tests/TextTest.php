@@ -37,6 +37,9 @@ class TextTest extends PHPUnit_Framework_TestCase {
 	 */
     protected static $_html = array();
 
+	/**
+	 * @brief before
+	 */
     public static function setUpBeforeClass() {
         $mds = glob(__DIR__ . '/data/*.md');
         foreach($mds as $filename) {
@@ -51,15 +54,30 @@ class TextTest extends PHPUnit_Framework_TestCase {
         }
     }
 
+	/**
+	 * test creating a new class
+	 */
     public function testConstruct() {
         $text = new MarkdownText(self::$_md['syntax']);
         $this->assertEquals(self::$_md['syntax'], $text->getMarkdown());
     }
 
+	/**
+	 * test set markdown
+	 */
     public function testSetGetMarkdown() {
         $text = new MarkdownText();
         $text->setMarkdown(self::$_md['basics']);
         $this->assertEquals(self::$_md['basics'], $text->getMarkdown());
+    }
+
+	/**
+	 * test get html
+	 */
+    public function testGetHtml() {
+        $text = new MarkdownText();
+        $text->setMarkdown("\nSome text\n");
+        $this->assertEquals("<p>Some text</p>\n", $text->getHtml());
     }
 
 }

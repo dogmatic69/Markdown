@@ -38,7 +38,7 @@
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class MarkdownFilterParagraph extends Markdown_Filter {
+class MarkdownFilterParagraph extends MarkdownFilter {
 	/**
 	 * Pass given text through the filter and return result.
 	 *
@@ -89,5 +89,5 @@ class MarkdownFilterParagraph extends Markdown_Filter {
 
 		return false;
 	}
-	
+
 }

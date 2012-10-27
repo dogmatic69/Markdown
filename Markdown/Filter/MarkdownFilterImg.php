@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+require_once 'MarkdownFilterLink.php';
 /**
  * Translates images.
  *
@@ -50,5 +50,5 @@ class MarkdownFilterImg extends MarkdownFilterLink {
 		$this->_format = '<img src="%s"%s alt="%s" />';
 		return parent::filter($text);
 	}
-	
+
 }

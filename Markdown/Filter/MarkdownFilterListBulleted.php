@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+require_once 'MarkdownFilterList.php';
+
 /**
  * Translates bulleted lists.
  *

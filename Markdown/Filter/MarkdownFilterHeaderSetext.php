@@ -36,7 +36,7 @@
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class MarkdownFilterHeaderSetext extends Markdown_Filter {
+class MarkdownFilterHeaderSetext extends MarkdownFilter {
 	/**
 	 * Pass given text through the filter and return result.
 	 *
@@ -66,5 +66,5 @@ class MarkdownFilterHeaderSetext extends Markdown_Filter {
 			$values['text']
 		);
 	}
-	
+
 }

@@ -21,8 +21,6 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
  * Translates links.
  *
@@ -41,7 +39,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class MarkdownFilterLink extends Markdown_Filter {
+class MarkdownFilterLink extends MarkdownFilter {
 	/**
 	 * Array with link definitions
 	 *
@@ -182,5 +180,5 @@ class MarkdownFilterLink extends Markdown_Filter {
 	protected function encodeAttribute($text) {
 		return str_replace('"', '&quot;', $text);
 	}
-	
+
 }

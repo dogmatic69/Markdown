@@ -21,8 +21,6 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
-
 /**
  * Abstract class for all list's types
  *
@@ -38,7 +36,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-abstract class MarkdownFilterList extends Markdown_Filter {
+abstract class MarkdownFilterList extends MarkdownFilter {
 	/**
 	 * Type of list
 	 *

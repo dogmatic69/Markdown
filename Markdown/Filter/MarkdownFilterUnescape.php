@@ -34,19 +34,19 @@
  */
 class MarkdownFilterUnescape extends MarkdownFilter
 {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        return preg_replace(
-            '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
-            '$1',
-            $text
-        );
-    }
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		return preg_replace(
+			'/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
+			'$1',
+			$text
+		);
+	}
 	
 }

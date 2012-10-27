@@ -37,34 +37,34 @@
  * @version 1.0
  */
 class MarkdownFilterHeaderSetext extends Markdown_Filter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        return preg_replace_callback(
-            '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
-            array($this, 'transformHeaderSetext'),
-            $text
-        );
-    }
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		return preg_replace_callback(
+			'/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
+			array($this, 'transformHeaderSetext'),
+			$text
+		);
+	}
 
-    /**
-     * Takes a single markdown header
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderSetext($values) {
-        return sprintf(
+	/**
+	 * Takes a single markdown header
+	 * and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformHeaderSetext($values) {
+		return sprintf(
 			"<h%1\$d>%2\$s</h%1\$d>\n\n",
 			$values['level'] == '=' ? 1 : 2,
 			$values['text']
 		);
-    }
+	}
 	
 }

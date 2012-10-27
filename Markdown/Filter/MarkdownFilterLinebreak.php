@@ -27,7 +27,7 @@
  * Definitions:
  * <ul>
  *   <li>linebreak is indicated by two or more spaces and (\n)
- *      at the end of line</li>
+ *	  at the end of line</li>
  * </ul>
  *
  * @package Markdown
@@ -36,15 +36,15 @@
  * @version 1.0
  */
 class MarkdownFilterLinebreak extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        return preg_replace('/ {2,}\n/', '<br />', $text);
-    }
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		return preg_replace('/ {2,}\n/', '<br />', $text);
+	}
 	
 }

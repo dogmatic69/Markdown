@@ -32,8 +32,8 @@
  * @version 1.0
  */
 class MarkdownFilterNewline extends MarkdownFilter {
-    public function filter($text) {
-        return str_replace(array("\r\n", "\r"), "\n", $text);
-    }
+	public function filter($text) {
+		return str_replace(array("\r\n", "\r"), "\n", $text);
+	}
 	
 }

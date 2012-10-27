@@ -31,7 +31,7 @@
  *   <li>the same character must be used to open and close an emphasis span</li>
  *   <li>emphasis can be used in the middle of a word</li>
  *   <li>if an * or _ is surrounded by spaces,
- *      it’ll be treated as a literal asterisk or an underscore</li>
+ *	  it’ll be treated as a literal asterisk or an underscore</li>
  * </ul>
  *
  * @package Markdown
@@ -41,29 +41,29 @@
  * @version 1.0
  */
 class MarkdownFilterEmphasis extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        // strong
-        $text = preg_replace(
-            '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
-            '<strong>$2</strong>',
-        $text
-        );
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		// strong
+		$text = preg_replace(
+			'/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
+			'<strong>$2</strong>',
+		$text
+		);
 
-        // emphasis
-        $text = preg_replace(
-            '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
-            '<em>$2</em>',
-            $text
-        );
+		// emphasis
+		$text = preg_replace(
+			'/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
+			'<em>$2</em>',
+			$text
+		);
 
-        return $text;
-    }
+		return $text;
+	}
 
 }

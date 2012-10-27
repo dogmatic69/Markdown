@@ -36,6 +36,6 @@
  * @version 1.0
  */
 class MarkdownFilterListNumbered extends MarkdownFilterList {
-    protected $_listType = 'ol';
-    protected $_markers = '(?:\d+\.)';
+	protected $_listType = 'ol';
+	protected $_markers = '(?:\d+\.)';
 }

@@ -38,32 +38,32 @@
  * @version 1.0
  */
 class MarkdownFilterEntities extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        // always escape within code blocks and spans
-        $text = preg_replace_callback(
-            array('/^( {4,}|\t+).*?$/mu',
-                  '/(?<!\\\\)`.*?(?<!\\\\)`/u'
-            ),
-            function ($match) {
-                return htmlspecialchars($match[0], ENT_NOQUOTES);
-            },
-            $text
-        );
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		// always escape within code blocks and spans
+		$text = preg_replace_callback(
+			array('/^( {4,}|\t+).*?$/mu',
+				  '/(?<!\\\\)`.*?(?<!\\\\)`/u'
+			),
+			function ($match) {
+				return htmlspecialchars($match[0], ENT_NOQUOTES);
+			},
+			$text
+		);
 
-        // escape & outside of html entity
-        $text = preg_replace('/&(?![A-z]+;)/u', '&amp;', $text);
+		// escape & outside of html entity
+		$text = preg_replace('/&(?![A-z]+;)/u', '&amp;', $text);
 
-        // escape < outside of html tag
-        $text = preg_replace('/<(?![A-z\\/])/u', '&lt;', $text);
+		// escape < outside of html tag
+		$text = preg_replace('/<(?![A-z\\/])/u', '&lt;', $text);
 
-        return $text;
-    }
+		return $text;
+	}
 
 }

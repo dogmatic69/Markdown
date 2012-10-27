@@ -32,70 +32,70 @@ require_once __DIR__ . '/MarkdownFilter.php';
  * @version 1.0
  */
 class MarkdownText {
-    /**
-     * Internal cache of the markdown
+	/**
+	 * Internal cache of the markdown
 	 *
-     * @var string
-     */
-    protected $_markdown;
+	 * @var string
+	 */
+	protected $_markdown;
 
-    /**
-     * Internal cache of the html
+	/**
+	 * Internal cache of the html
 	 *
-     * @var string
-     */
-    protected $_html;
+	 * @var string
+	 */
+	protected $_html;
 
-    /**
-     *
-     * @param string $markdown
-     */
-    public function __construct($markdown = '') {
-        $this->setMarkdown($markdown);
-    }
+	/**
+	 *
+	 * @param string $markdown
+	 */
+	public function __construct($markdown = '') {
+		$this->setMarkdown($markdown);
+	}
 
-    /**
-     * Get the html
+	/**
+	 * Get the html
 	 *
 	 * If not already converted, the markdown will be converted to html
 	 *
-     * @return string
-     */
-    public function getHtml() {
-        if ($this->_html === null) {
-            $this->_html = MarkdownFilter::run($this->getMarkdown());
-        }
+	 * @return string
+	 */
+	public function getHtml() {
+		if ($this->_html === null) {
+			$this->_html = MarkdownFilter::run($this->getMarkdown());
+		}
 
-        return $this->_html;
-    }
+		return $this->_html;
+	}
 
-    /**
-     * Get the markdown
+	/**
+	 * Get the markdown
 	 *
-     * @return string
-     */
-    public function getMarkdown() {
-        return $this->_markdown;
-    }
+	 * @return string
+	 */
+	public function getMarkdown() {
+		return $this->_markdown;
+	}
 
-    /**
-     * Set the markdown
+	/**
+	 * Set the markdown
 	 *
 	 * If the markdown is the same as what has been set previously nothing is done
 	 *
-     * @param string $markdown the markdown to be converted
+	 * @param string $markdown the markdown to be converted
 	 *
-     * @return MarkdownText
-     */
-    public function setMarkdown($markdown) {
-        $markdown = (string)$markdown;
+	 * @return MarkdownText
+	 */
+	public function setMarkdown($markdown) {
+		$markdown = (string)$markdown;
 
-        if ($markdown !== $this->_markdown) {
-            $this->_markdown = $markdown;
-            $this->_html     = null;
-        }
+		if ($markdown !== $this->_markdown) {
+			$this->_markdown = $markdown;
+			$this->_html	 = null;
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
 }

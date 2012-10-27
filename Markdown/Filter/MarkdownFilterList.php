@@ -30,7 +30,7 @@ require_once __DIR__ . '/../Filter.php';
  * <ul>
  *   <li>list items may consist of multiple paragraphs</li>
  *   <li>each subsequent paragraph in a list item
- *      must be indented by either 4 spaces or one tab</li>
+ *	  must be indented by either 4 spaces or one tab</li>
  * </ul>
  *
  * @package Markdown
@@ -39,86 +39,86 @@ require_once __DIR__ . '/../Filter.php';
  * @version 1.0
  */
 abstract class MarkdownFilterList extends Markdown_Filter {
-    /**
-     * Type of list
-     *
-     * @var string
-     */
-    protected $_listType;
+	/**
+	 * Type of list
+	 *
+	 * @var string
+	 */
+	protected $_listType;
 
-    /**
-     * Markers for regular expression
-     *
-     * @var string
-     */
-    protected $_markers;
+	/**
+	 * Markers for regular expression
+	 *
+	 * @var string
+	 */
+	protected $_markers;
 
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        $text = preg_replace_callback(
-            sprintf(
-                '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
-                $this->_markers
-            ),
-            array($this, 'transformList'), $text);
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		$text = preg_replace_callback(
+			sprintf(
+				'/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
+				$this->_markers
+			),
+			array($this, 'transformList'), $text);
 
-        return $text;
-    }
+		return $text;
+	}
 
-    /**
-     * Takes a single markdown list
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformList($values) {
-        $list = $values['list'];
-        $list = $this->transformListItems($list);
+	/**
+	 * Takes a single markdown list
+	 * and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformList($values) {
+		$list = $values['list'];
+		$list = $this->transformListItems($list);
 
-        return sprintf("\n<%1\$s>\n%2\$s</%1\$s>\n\n", $this->_listType, $list);
-    }
+		return sprintf("\n<%1\$s>\n%2\$s</%1\$s>\n\n", $this->_listType, $list);
+	}
 
-    /**
-     * Process the contents of a single ordered or unordered list,
-     * splitting it into individual list items.
-     *
-     * @param string
-     * @return string
-     */
-    protected function transformListItems($text) {
-        $text = rtrim($text, "\n");
-        $text = preg_replace_callback(
-            sprintf(
-                '/(\n)?(?P<leading_space>^[ \t]*)(?P<marker>%1$s)[ \t]+(?P<item>(?s:.+?))(?=\n*(\Z|\2(%1$s)[ \t]+))/m',
-                $this->_markers
-            ),
-            array($this, 'transformListItem'), $text);
+	/**
+	 * Process the contents of a single ordered or unordered list,
+	 * splitting it into individual list items.
+	 *
+	 * @param string
+	 * @return string
+	 */
+	protected function transformListItems($text) {
+		$text = rtrim($text, "\n");
+		$text = preg_replace_callback(
+			sprintf(
+				'/(\n)?(?P<leading_space>^[ \t]*)(?P<marker>%1$s)[ \t]+(?P<item>(?s:.+?))(?=\n*(\Z|\2(%1$s)[ \t]+))/m',
+				$this->_markers
+			),
+			array($this, 'transformListItem'), $text);
 
-        return $text;
-    }
+		return $text;
+	}
 
-    /**
-     * Takes a single markdown list item
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformListItem($values) {
-        $item = $values['item'];
-        $leadingSpace = $values['leading_space'];
-        $markerSpace = $values['marker'];
-        $item = $leadingSpace . str_repeat(' ', strlen($markerSpace)) . $item;
-        $item = self::outdent($item);
+	/**
+	 * Takes a single markdown list item
+	 * and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformListItem($values) {
+		$item = $values['item'];
+		$leadingSpace = $values['leading_space'];
+		$markerSpace = $values['marker'];
+		$item = $leadingSpace . str_repeat(' ', strlen($markerSpace)) . $item;
+		$item = self::outdent($item);
 
-        return sprintf("<li>%s</li>\n", $item);
-    }
+		return sprintf("<li>%s</li>\n", $item);
+	}
 
 }

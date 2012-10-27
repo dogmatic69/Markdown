@@ -32,144 +32,144 @@
  * @version 1.0
  */
 abstract class MarkdownFilter {
-    /**
-     * Default filters
+	/**
+	 * Default filters
 	 *
-     * @var array
-     */
-    protected static $_defaultFilters = array(
-        'Newline',
-        'Blockquote',
-        'Code',
-        'Emphasis',
-        'Entities',
-        'HeaderAtx',
-        'HeaderSetext',
-        'Hr',
-        'Img',
-        'Linebreak',
-        'Link',
-        'ListBulleted',
-        'ListNumbered',
-        'Paragraph',
-        'Unescape'
-    );
-
-    /**
-     * List of characters which copies as is after \ char.
-     *
-     * @var array
-     */
-    protected static $_escapableChars = array(
-        '\\', '`', '*', '_', '{', '}', '[', ']',
-        '(' , ')', '#', '+', '-', '.', '!'
+	 * @var array
+	 */
+	protected static $_defaultFilters = array(
+		'Newline',
+		'Blockquote',
+		'Code',
+		'Emphasis',
+		'Entities',
+		'HeaderAtx',
+		'HeaderSetext',
+		'Hr',
+		'Img',
+		'Linebreak',
+		'Link',
+		'ListBulleted',
+		'ListNumbered',
+		'Paragraph',
+		'Unescape'
 	);
 
-    /**
-     * Block-level HTML tags.
-     *
-     * @var array
-     */
-    protected static $_blockTags = array(
-        'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre',
-        'table', 'dl', 'ol', 'ul', 'script', 'noscript', 'form', 'fieldset',
-        'iframe', 'math', 'ins', 'del', 'article', 'aside', 'header', 'hgroup',
-        'footer', 'nav', 'section', 'figure', 'figcaption'
-    );
-
-    /**
-     * Lookup MarkdownFilter{$filtername} class and return its instance.
+	/**
+	 * List of characters which copies as is after \ char.
 	 *
-     * @param string $filtername
-     *
-     * @return Markdown_Filter
+	 * @var array
+	 */
+	protected static $_escapableChars = array(
+		'\\', '`', '*', '_', '{', '}', '[', ']',
+		'(' , ')', '#', '+', '-', '.', '!'
+	);
+
+	/**
+	 * Block-level HTML tags.
 	 *
-     * @throws InvalidArgumentException
-     */
-    public static function factory($filtername) {
-        if (is_string($filtername) && ctype_alnum($filtername)) {
-            $class = 'MarkdownFilter'   . $filtername;
-            $file  = __DIR__ . '/Filter/' . $class . '.php';
+	 * @var array
+	 */
+	protected static $_blockTags = array(
+		'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre',
+		'table', 'dl', 'ol', 'ul', 'script', 'noscript', 'form', 'fieldset',
+		'iframe', 'math', 'ins', 'del', 'article', 'aside', 'header', 'hgroup',
+		'footer', 'nav', 'section', 'figure', 'figcaption'
+	);
 
-            if (is_readable($file)) {
-                require_once $file;
+	/**
+	 * Lookup MarkdownFilter{$filtername} class and return its instance.
+	 *
+	 * @param string $filtername
+	 *
+	 * @return Markdown_Filter
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	public static function factory($filtername) {
+		if (is_string($filtername) && ctype_alnum($filtername)) {
+			$class = 'MarkdownFilter'   . $filtername;
+			$file  = __DIR__ . '/Filter/' . $class . '.php';
 
-                if (!class_exists($class)) {
-                    throw new InvalidArgumentException(
-                        'Could not find class ' . $class
-                    );
-                }
+			if (is_readable($file)) {
+				require_once $file;
+
+				if (!class_exists($class)) {
+					throw new InvalidArgumentException(
+						'Could not find class ' . $class
+					);
+				}
 				return new $class;
-            }
-            throw new InvalidArgumentException($file . ' is not readable');
-        }
+			}
+			throw new InvalidArgumentException($file . ' is not readable');
+		}
 
 		throw new InvalidArgumentException(sprintf(
 			'$filtername must be an alphanumeric string, <%s> given.',
 			gettype($filtername)
 		));
-    }
+	}
 
-    /**
+	/**
 	 * Get the default filters
 	 *
-     * @return array
-     */
-    public static function getDefaultFilters() {
-        return self::$_defaultFilters;
-    }
+	 * @return array
+	 */
+	public static function getDefaultFilters() {
+		return self::$_defaultFilters;
+	}
 
-    /**
+	/**
 	 * Set default filters
 	 *
-     * @param array $filters the filters to use
-     */
-    public static function setDefaultFilters(array $filters) {
-        self::$_defaultFilters = $filters;
-    }
+	 * @param array $filters the filters to use
+	 */
+	public static function setDefaultFilters(array $filters) {
+		self::$_defaultFilters = $filters;
+	}
 
-    /**
-     * Pass given $text through $filters chain and return result.
-     * Use default filters in no $filters given.
-     *
-     * @param string $text the markdown text
-     * @param array $filters optional list of filters to run
+	/**
+	 * Pass given $text through $filters chain and return result.
+	 * Use default filters in no $filters given.
 	 *
-     * @return string
-     */
-    public static function run($text, array $filters = null){
-        if ($filters === null) {
-            $filters = self::getDefaultFilters();
-        }
+	 * @param string $text the markdown text
+	 * @param array $filters optional list of filters to run
+	 *
+	 * @return string
+	 */
+	public static function run($text, array $filters = null){
+		if ($filters === null) {
+			$filters = self::getDefaultFilters();
+		}
 
-        foreach ($filters as $filter) {
+		foreach ($filters as $filter) {
 			if (is_string($filter)) {
-                $filter = self::factory($filter);
-            }
-            if (!$filter instanceof Markdown_Filter) {
-                throw new InvalidArgumentException(
-                    '$filters must be an array which elements ' .
-                    'is either a string or Markdown_Filter'
-                );
-            }
+				$filter = self::factory($filter);
+			}
+			if (!$filter instanceof Markdown_Filter) {
+				throw new InvalidArgumentException(
+					'$filters must be an array which elements ' .
+					'is either a string or Markdown_Filter'
+				);
+			}
 
-            $text = $filter->filter($text);
-        }
+			$text = $filter->filter($text);
+		}
 
-        return $text;
-    }
+		return $text;
+	}
 
-    /**
-     * Remove one level of indentation
-     *
-     * @param string text to outdent
+	/**
+	 * Remove one level of indentation
 	 *
-     * @return string
-     */
-    protected static function outdent($text) {
-        return preg_replace('/^(\t| {1,4})/m', '', $text);
-    }
+	 * @param string text to outdent
+	 *
+	 * @return string
+	 */
+	protected static function outdent($text) {
+		return preg_replace('/^(\t| {1,4})/m', '', $text);
+	}
 
-    abstract public function filter($text);
+	abstract public function filter($text);
 
 }

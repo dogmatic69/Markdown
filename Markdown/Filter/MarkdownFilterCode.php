@@ -30,14 +30,14 @@
  *   <li>one level of indentation is removed from each line of the code block</li>
  *   <li>code block continues until it reaches a line that is not indented</li>
  *   <li>within a code block, ampersands (&) and angle brackets (< and >)
- *      are automatically converted into HTML entities</li>
+ *	  are automatically converted into HTML entities</li>
  * </ul>
  *
  * Definitions of code span:
  * <ul>
  *   <li>span of code is indicated by backtick quotes (`)</li>
  *   <li>to include one or more backticks the delimiters must
- *     contain multiple backticks</li>
+ *	 contain multiple backticks</li>
  * </ul>
  *
  * @package Markdown
@@ -47,55 +47,55 @@
  * @version 1.0
  */
 class MarkdownFilterCode extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        $text = preg_replace_callback(
-            '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
-            array($this, 'transformCodeBlock'),
-            $text
-        );
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		$text = preg_replace_callback(
+			'/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
+			array($this, 'transformCodeBlock'),
+			$text
+		);
 
-        $text = preg_replace_callback(
-            '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
-            array($this, 'transformCode'),
-            $text
-        );
+		$text = preg_replace_callback(
+			'/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
+			array($this, 'transformCode'),
+			$text
+		);
 
-        return $text;
-    }
+		return $text;
+	}
 
-    /**
-     * Takes a single markdown code block and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformCodeBlock($values) {
-        $code = self::outdent($values['code']);
-        $code = htmlspecialchars($code, ENT_NOQUOTES);
-        $code = ltrim($code, "\n");
-        $code = rtrim($code);
+	/**
+	 * Takes a single markdown code block and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformCodeBlock($values) {
+		$code = self::outdent($values['code']);
+		$code = htmlspecialchars($code, ENT_NOQUOTES);
+		$code = ltrim($code, "\n");
+		$code = rtrim($code);
 
-        return sprintf("\n\n<pre><code>%s\n</code></pre>\n\n", $code);
-    }
+		return sprintf("\n\n<pre><code>%s\n</code></pre>\n\n", $code);
+	}
 
-    /**
-     * Takes a single markdown code span
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformCode($values) {
-        $code = trim($values['code'], " \t");
-        $code = htmlspecialchars($code, ENT_NOQUOTES);
+	/**
+	 * Takes a single markdown code span
+	 * and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformCode($values) {
+		$code = trim($values['code'], " \t");
+		$code = htmlspecialchars($code, ENT_NOQUOTES);
 
-        return sprintf("<code>%s</code>", $code);
-    }
+		return sprintf("<code>%s</code>", $code);
+	}
 }

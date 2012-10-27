@@ -27,10 +27,10 @@
  * Definitions:
  * <ul>
  *   <li>paragraph is simply one or more consecutive lines of text,
- *      separated by one or more blank lines</li>
+ *	  separated by one or more blank lines</li>
  *   <li>normal paragraphs should not be indented</li>
  *   <li>block level inline html must be separated with blank lines
- *      and start and end tags should not be indented</li>
+ *	  and start and end tags should not be indented</li>
  * </ul>
  *
  * @package Markdown
@@ -39,55 +39,55 @@
  * @version 1.0
  */
 class MarkdownFilterParagraph extends Markdown_Filter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        $result = '';
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		$result = '';
 
-        // split by empty lines to match paragraphs
-        foreach(preg_split('/\n\s*\n/', $text) as $snippet) {
-            $snippet = trim($snippet, "\n");
+		// split by empty lines to match paragraphs
+		foreach(preg_split('/\n\s*\n/', $text) as $snippet) {
+			$snippet = trim($snippet, "\n");
 			$template = "%s\n";
-            if (self::isParagraph($snippet)) {
+			if (self::isParagraph($snippet)) {
 				$template = "<p>%s</p>\n";
-            }
+			}
 
-            $result .= sprintf($template, $snippet);
-        }
+			$result .= sprintf($template, $snippet);
+		}
 
-        return rtrim($result, "\n") . "\n";
-    }
+		return rtrim($result, "\n") . "\n";
+	}
 
-    /**
-     * Return true if given text is:
-     * <ul>
-     *   <li>not intended</li>
-     *   <li>not started by a block-level tag</li>
-     * </ul>
-     *
-     * False otherwise.
-     *
-     * @param string $text
-     * @return bool
-     */
-    protected static function isParagraph($text) {
-        if (strlen($text) > 0) {
-            // should not be indented
-            if (!preg_match('/^\s/', $text)) {
-                // should not be a block-level tag
-                $regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
-                if (!preg_match($regex, $text)) {
-                    return true;
-                }
-            }
-        }
+	/**
+	 * Return true if given text is:
+	 * <ul>
+	 *   <li>not intended</li>
+	 *   <li>not started by a block-level tag</li>
+	 * </ul>
+	 *
+	 * False otherwise.
+	 *
+	 * @param string $text
+	 * @return bool
+	 */
+	protected static function isParagraph($text) {
+		if (strlen($text) > 0) {
+			// should not be indented
+			if (!preg_match('/^\s/', $text)) {
+				// should not be a block-level tag
+				$regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
+				if (!preg_match($regex, $text)) {
+					return true;
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 	
 }

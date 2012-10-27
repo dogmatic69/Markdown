@@ -27,7 +27,7 @@
  * Definitions:
  * <ul>
  *   <li>horizontal rule produced by placing three or more
- *      hyphens, asterisks, or underscores on a line by themselves</li>
+ *	  hyphens, asterisks, or underscores on a line by themselves</li>
  *   <li>spaces can be used between the hyphens or asterisks</li>
  * </ul>
  *
@@ -37,19 +37,19 @@
  * @version 1.0
  */
 class MarkdownFilterHr extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        return preg_replace(
-            '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
-            "\n<hr />\n",
-            $text
-        );
-    }
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		return preg_replace(
+			'/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
+			"\n<hr />\n",
+			$text
+		);
+	}
 	
 }

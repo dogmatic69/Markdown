@@ -35,6 +35,6 @@
  * @version 1.0
  */
 class MarkdownFilterListBulleted extends MarkdownFilterList {
-    protected $_listType = 'ul';
-    protected $_markers = '(?:[*+-])';
+	protected $_listType = 'ul';
+	protected $_markers = '(?:[*+-])';
 }

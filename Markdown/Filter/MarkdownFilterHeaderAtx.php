@@ -37,32 +37,32 @@
  * @version 1.0
  */
 class MarkdownFilterHeaderAtx extends MarkdownFilter {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Markdown_Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter($text) {
-        $text = preg_replace_callback(
-            '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
-            array($this, 'transformHeaderAtx'),
-            $text
-        );
+	/**
+	 * Pass given text through the filter and return result.
+	 *
+	 * @see Markdown_Filter::filter()
+	 * @param string $text
+	 * @return string $text
+	 */
+	public function filter($text) {
+		$text = preg_replace_callback(
+			'/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
+			array($this, 'transformHeaderAtx'),
+			$text
+		);
 
-        return $text;
-    }
+		return $text;
+	}
 
-    /**
-     * Takes a single markdown header and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderAtx($values) {
-        $level = min(strlen($values['level']), 6);
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
-    }
+	/**
+	 * Takes a single markdown header and returns its html equivalent.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function transformHeaderAtx($values) {
+		$level = min(strlen($values['level']), 6);
+		return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
+	}
 
 }

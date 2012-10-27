@@ -159,13 +159,7 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'/ul',
 					'/blockquote'
 				)
-			),/*
-			/*'code' => array(
-				"\t\t%s",
-				array(
-					array('pre' => array())
-				)
-			),*/
+			),
 			'emphasis _' => array(
 				'_%s_',
 				array(
@@ -633,6 +627,16 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'/b',
 						' that is bold',
 					'/p'
+				)
+			),
+			'code' => array(
+				"\t%s\n",
+				array(
+					array('pre' => array()),
+						array('code' => array()),
+							'Some text',
+						//'/code',
+					//'/pre',
 				)
 			),
 			'code_html' => array(

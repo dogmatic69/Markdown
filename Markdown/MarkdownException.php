@@ -21,11 +21,11 @@ class MarkdownException extends Exception {
 				$message = vsprintf($this->_message, $message);
 			}
 		}
-		if (empty($mesage) && !empty($this->_message)) {
-			$mesage = $this->_message;
+		if (empty($message) && !empty($this->_message)) {
+			$message = $this->_message;
 		}
 
-		parent::__construct((string)$message, $code, $previous);
+		parent::__construct($message, $code, $previous);
 	}
 
 }

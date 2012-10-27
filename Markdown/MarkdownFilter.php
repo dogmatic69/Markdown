@@ -92,15 +92,17 @@ abstract class MarkdownFilter {
 		}
 
 		$class = 'MarkdownFilter'   . $filtername;
-		$file  = __DIR__ . '/Filter/' . $class . '.php';
+		if(!class_exists($class)) {
+			$file  = __DIR__ . '/Filter/' . $class . '.php';
 
-		if (!is_readable($file)) {
-			throw new MarkdownFilterNotFoundException(array($class));
-		}
-		require_once $file;
+			if (!is_readable($file)) {
+				throw new MarkdownFilterNotFoundException(array($class));
+			}
+			require_once $file;
 
-		if (!class_exists($class)) {
-			throw new MarkdownFilterNotFoundException(array($class));
+			if (!class_exists($class)) {
+				throw new MarkdownFilterNotFoundException(array($class));
+			}
 		}
 
 		return new $class;

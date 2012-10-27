@@ -23,6 +23,12 @@
 
 require_once __DIR__ . '/../Markdown/MarkdownText.php';
 
+class MarkdownFilterCustomTest extends MarkdownFilter {
+	public function filter($text) {
+		return str_replace('foo', 'bar', $text);
+	}
+}
+
 class FilterTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException MarkdownFilterInvalidException
@@ -139,6 +145,15 @@ class FilterTest extends PHPUnit_Framework_TestCase {
 				"\n\n<pre><code>\tSome text\n</code></pre>\n\n",
 			)
 		);
+	}
+
+	/**
+	 * test custom filters
+	 */
+	public function testCustomFilters() {
+		$expected = 'some text bar';
+		$result = MarkdownFilter::run('some text foo', array('CustomTest'));
+		$this->assertEquals($expected, $result);
 	}
 
 }

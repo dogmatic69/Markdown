@@ -87,27 +87,23 @@ abstract class MarkdownFilter {
 	 * @throws InvalidArgumentException
 	 */
 	public static function factory($filtername) {
-		if (is_string($filtername) && ctype_alnum($filtername)) {
-			$class = 'MarkdownFilter'   . $filtername;
-			$file  = __DIR__ . '/Filter/' . $class . '.php';
-
-			if (is_readable($file)) {
-				require_once $file;
-
-				if (!class_exists($class)) {
-					throw new InvalidArgumentException(
-						'Could not find class ' . $class
-					);
-				}
-				return new $class;
-			}
-			throw new InvalidArgumentException($file . ' is not readable');
+		if (!is_string($filtername) || !ctype_alnum($filtername)) {
+			throw new MarkdownFilterInvalidException(array($filtername));
 		}
 
-		throw new InvalidArgumentException(sprintf(
-			'$filtername must be an alphanumeric string, <%s> given.',
-			gettype($filtername)
-		));
+		$class = 'MarkdownFilter'   . $filtername;
+		$file  = __DIR__ . '/Filter/' . $class . '.php';
+
+		if (!is_readable($file)) {
+			throw new MarkdownFilterNotFoundException(array($class));
+		}
+		require_once $file;
+
+		if (!class_exists($class)) {
+			throw new MarkdownFilterNotFoundException(array($class));
+		}
+
+		return new $class;
 	}
 
 	/**
@@ -146,11 +142,8 @@ abstract class MarkdownFilter {
 			if (is_string($filter)) {
 				$filter = self::factory($filter);
 			}
-			if (!$filter instanceof Markdown_Filter) {
-				throw new InvalidArgumentException(
-					'$filters must be an array which elements ' .
-					'is either a string or Markdown_Filter'
-				);
+			if (!$filter instanceof MarkdownFilter) {
+				throw new MarkdownFilterInvalidException(array($fiter));
 			}
 
 			$text = $filter->filter($text);
@@ -166,7 +159,7 @@ abstract class MarkdownFilter {
 	 *
 	 * @return string
 	 */
-	protected static function outdent($text) {
+	protected static function _outdent($text) {
 		return preg_replace('/^(\t| {1,4})/m', '', $text);
 	}
 

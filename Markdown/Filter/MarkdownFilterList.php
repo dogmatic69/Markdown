@@ -116,7 +116,7 @@ abstract class MarkdownFilterList extends Markdown_Filter {
 		$leadingSpace = $values['leading_space'];
 		$markerSpace = $values['marker'];
 		$item = $leadingSpace . str_repeat(' ', strlen($markerSpace)) . $item;
-		$item = self::outdent($item);
+		$item = self::_outdent($item);
 
 		return sprintf("<li>%s</li>\n", $item);
 	}

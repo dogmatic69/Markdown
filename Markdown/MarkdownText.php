@@ -22,6 +22,7 @@
  */
 
 require_once __DIR__ . '/MarkdownFilter.php';
+require_once __DIR__ . '/MarkdownException.php';
 
 /**
  * Represents a piece of text which can be both markdown and html.

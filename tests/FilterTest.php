@@ -25,14 +25,29 @@ require_once __DIR__ . '/../Markdown/MarkdownText.php';
 
 class FilterTest extends PHPUnit_Framework_TestCase {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException MarkdownFilterInvalidException
+	 *
+	 * @dataProvider invalidFilters
      */
-    public function testFactoryNonAlnum() {
-        MarkdownFilter::factory('/etc/passwd');
+    public function testFactoryNonAlnum($data) {
+        MarkdownFilter::factory($data);
     }
 
+	/**
+	 * invalid filters data provider
+	 *
+	 * @return array
+	 */
+	public function invalidFilters() {
+		return array(
+			array('/etc/passwd'),
+			array(123),
+			array('asd!@#')
+		);
+	}
+
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException MarkdownFilterNotFoundException
      */
     public function testFactoryNonExistent() {
         MarkdownFilter::factory('suchfilterdoesntexists');
@@ -62,10 +77,68 @@ class FilterTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException MarkdownFilterInvalidException
+	 *
+	 * @dataProvider invalidFilterDataProvider
      */
-    public function testRunWithInvalidFiltersParameter() {
-        MarkdownFilter::run('', array('Filter', 1, false, true));
+    public function testRunWithInvalidFiltersParameter($data) {
+        MarkdownFilter::run('', array(1, false, true));
     }
+
+	/**
+	 * Data provider for various filter fails
+	 *
+	 * @return array
+	 */
+	public function invalidFilterDataProvider() {
+		return array(
+			'null' => array(null),
+			'bool' => array(true),
+			'char' => array('filter!@#')
+
+		);
+	}
+
+    /**
+	 * default filters
+	 *
+	 * @dataProvider invalidFilterDataProvider
+     */
+    public function testRunWithDefaultFilters($data) {
+        MarkdownFilter::run('');
+    }
+
+	/**
+	 * test outdenting of code
+	 *
+	 * @dataProvider outdentDataProvider
+	 */
+	public function testOutdent($data, $expected) {
+		$result = MarkdownFilter::run($data, array('Code'));
+
+		$this->assertEquals($expected, $result);
+	}
+
+	/**
+	 * outdent data provider
+	 *
+	 * @return array
+	 */
+	public function outdentDataProvider() {
+		return array(
+			'tabs' => array(
+				"\n\t\tSome text\n",
+				"\n\n<pre><code>\tSome text\n</code></pre>\n\n",
+			),
+			'spaces' => array(
+				"\n        Some text\n",
+				"\n\n<pre><code>    Some text\n</code></pre>\n\n",
+			),
+			'mixed' => array(
+				"\n    \tSome text\n",
+				"\n\n<pre><code>\tSome text\n</code></pre>\n\n",
+			)
+		);
+	}
 
 }

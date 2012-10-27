@@ -147,7 +147,7 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						"Have \"> \nSome text > another\n > still\" here",
 					'/blockquote'
 				)
-			), /* does not render li
+			), */
 			'blockquote_li' => array(
 				'> - %s',
 				array(
@@ -159,7 +159,7 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'/ul',
 					'/blockquote'
 				)
-			), */
+			),/*
 			/*'code' => array(
 				"\t\t%s",
 				array(

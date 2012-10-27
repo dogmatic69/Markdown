@@ -78,7 +78,7 @@ class MarkdownFilterParagraph extends MarkdownFilter {
 	protected static function isParagraph($text) {
 		if (strlen($text) > 0) {
 			// should not be indented
-			if (!preg_match('/^\s/', $text)) {
+			if (!preg_match('/^(\s|<\/)/', $text)) {
 				// should not be a block-level tag
 				$regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
 				if (!preg_match($regex, $text)) {

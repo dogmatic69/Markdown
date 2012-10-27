@@ -95,6 +95,7 @@ class MarkdownFilterBlockquote extends MarkdownFilter {
 	 */
 	protected function transformQuote($text) {
 		$text = preg_replace('/^\s*>\s*/m', '', $text);
+		$text = MarkdownFilter::run($text, array('ListBulleted', 'ListNumbered'));
 
 		foreach ($this->searchQuotes($text) as $quote) {
 			$text = str_replace($quote, $this->transformQuote($quote), $text);

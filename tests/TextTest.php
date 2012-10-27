@@ -110,13 +110,55 @@ class TextTest extends PHPUnit_Framework_TestCase {
 					'/blockquote'
 				)
 			),
+			'blockquote_double_space' => array(
+				'>> %s',
+				array(
+					array('blockquote' => array()),
+						array('blockquote' => array()),
+							'Some text',
+						'/blockquote',
+					'/blockquote'
+				)
+			),
+			'blockquote_double_space' => array(
+				'> > %s',
+				array(
+					array('blockquote' => array()),
+						array('blockquote' => array()),
+							'Some text',
+						'/blockquote',
+					'/blockquote'
+				)
+			),
+			'blockquote_other_markdown' => array(
+				'> **%s**',
+				array(
+					array('blockquote' => array()),
+						array('strong' => array()),
+							'Some text',
+						'/strong',
+					'/blockquote'
+				)
+			), /* does not render li
+			'blockquote_li' => array(
+				'> - %s',
+				array(
+					array('blockquote' => array()),
+						array('ul' => array()),
+							array('li' => array()),
+								'Some text',
+							'/li',
+						'/ul',
+					'/blockquote'
+				)
+			), */
 			/*'code' => array(
 				"\t\t%s",
 				array(
 					array('pre' => array())
 				)
 			),*/
-			'emphasis' => array(
+			'emphasis _' => array(
 				'_%s_',
 				array(
 					array('p' => array()),
@@ -126,6 +168,70 @@ class TextTest extends PHPUnit_Framework_TestCase {
 					'/p'
 				)
 			),
+			'emphasis *' => array(
+				'*%s*',
+				array(
+					array('p' => array()),
+						array('em' => array()),
+							'Some text',
+						'/em',
+					'/p'
+				)
+			),
+			'emphasis _ mid word' => array(
+				'%s c_oo_l',
+				array(
+					array('p' => array()),
+						'Some text c',
+						array('em' => array()),
+							'oo',
+						'/em',
+						'l',
+					'/p'
+				)
+			),
+			'emphasis * mid word' => array(
+				'%s c*oo*l',
+				array(
+					array('p' => array()),
+						'Some text c',
+						array('em' => array()),
+							'oo',
+						'/em',
+						'l',
+					'/p'
+				)
+			),
+			'emphasis __' => array(
+				'__%s__',
+				array(
+					array('p' => array()),
+						array('strong' => array()),
+							'Some text',
+						'/strong',
+					'/p'
+				)
+			),
+			'emphasis **' => array(
+				'**%s**',
+				array(
+					array('p' => array()),
+						array('strong' => array()),
+							'Some text',
+						'/strong',
+					'/p'
+				)
+			),/* does not render the em
+			'emphasis with escape' => array(
+				'_Some\_text',
+				array(
+					array('p' => array()),
+						array('em' => array()),
+							'Some_text',
+						'/em',
+					'/p'
+				)
+			),*/
 			'entities' => array(
 				'%s & more',
 				array(
@@ -192,6 +298,22 @@ class TextTest extends PHPUnit_Framework_TestCase {
 					'/h2'
 				)
 			),
+			'header_close_space' => array(
+				"## %s ##\n",
+				array(
+					array('h2' => array()),
+						'Some text',
+					'/h2'
+				)
+			),
+			'header_close_no_space' => array(
+				"##%s##\n",
+				array(
+					array('h2' => array()),
+						'Some text',
+					'/h2'
+				)
+			),
 			'hr -' => array(
 				"%s\n\n---",
 				array(
@@ -202,7 +324,18 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						array('hr' => array()),
 					'/p',
 				)
-			),/*
+			),
+			'hr - space' => array(
+				"%s\n\n- - -",
+				array(
+					array('p' => array()),
+						'Some text',
+					'/p',
+					array('p' => array()),
+						array('hr' => array()),
+					'/p',
+				)
+			),/* does not make hr
 			'hr *' => array(
 				"%s\n\n***\n",
 				array(
@@ -213,7 +346,18 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						array('hr' => array()),
 					'/p',
 				)
-			),
+			),*/
+			'hr * space' => array(
+				"%s\n\n* * *\n",
+				array(
+					array('p' => array()),
+						'Some text',
+					'/p',
+					array('p' => array()),
+						array('hr' => array()),
+					'/p',
+				)
+			),/*
 			'hr _' => array(
 				"%s\n\n___\n",
 				array(
@@ -246,7 +390,18 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						)),
 					'/p'
 				)
-			),
+			), /* makes em in alt tag.
+			'img_alt no_em' => array(
+				"![_%s_](/some/image.png)",
+				array(
+					array('p' => array()),
+						array('img' => array(
+							'src' => '/some/image.png',
+							'alt' => '_Some text_'
+						)),
+					'/p'
+				)
+			),*/
 			'img_title' => array(
 				"![](/some/image.png \"%s\")",
 				array(
@@ -280,7 +435,30 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'again',
 					'/p'
 				)
+			), /*
+			'link_simple' => array(
+				'see <http://example.com>\n',
+				array(
+					array('p' => array()),
+						'see ',
+						array('a' => array(
+							'href' => 'http://example.com'
+						)),
+							'http://example.com',
+						'/a',
+					'/p'
+				)
 			),
+			'link_mail' => array(
+				'email <foo@bar.com>',
+				array(
+					array('a' => array(
+						'href' => 'mailto:foo@bar.com'
+					)),
+						'foo@bar.com',
+					'/a'
+				)
+			),*/
 			'link_relative' => array(
 				'[%s](/some/url)',
 				array(
@@ -350,6 +528,16 @@ class TextTest extends PHPUnit_Framework_TestCase {
 						'/li',
 					'/ol'
 				)
+			),/* does not render more html
+			'list_with_block_quote' => array(
+				"- %s\n   > more text",
+				array(
+					array('ul' => array()),
+						array('li' => array()),
+							'Some text',
+						'/li',
+					'/ul'
+				)
 			),/*
 			'list p' => array(
 				"- %s\n\tthat is\n    long",
@@ -390,6 +578,123 @@ class TextTest extends PHPUnit_Framework_TestCase {
 				array(
 					array('p' => array()),
 						'+Some text-',
+					'/p'
+				)
+			),
+			'<' => array(
+				'%s < other text',
+				array(
+					array('p' => array()),
+						'Some text &lt; other text',
+					'/p'
+				)
+			),
+			'&amp_not_escaped' => array(
+				'%s &amp; more',
+				array(
+					array('p' => array()),
+						'Some text &amp; more',
+					'/p'
+				)
+			),
+			'&_escaped' => array(
+				'%s & more',
+				array(
+					array('p' => array()),
+						'Some text &amp; more',
+					'/p'
+				)
+			),
+			'inline_html_simple' => array(
+				'<p class="foobar">%s</p>',
+				array(
+					array('p' => array(
+						'class' => 'foobar'
+					)),
+						'Some text',
+					'/p'
+				)
+			),
+			'inline_html_tags' => array(
+				'This is a p with <b>%s</b> that is bold',
+				array(
+					array('p' => array()),
+						'This is a p with ',
+						array('b' => array()),
+							'Some text',
+						'/b',
+						' that is bold',
+					'/p'
+				)
+			),
+			'code_html' => array(
+				"\t<div>%s</div>\n",
+				array(
+					array('pre' => array()),
+						array('code' => array()),
+							'&lt;div&gt;Some text&lt;/div&gt;',
+						//'/code',
+					//'/pre'
+				)
+			), /** escaping indents issue #3
+			'code_html_with_indents' => array(
+				"\t<div>\n\t\t<b>%s</b>\n\t</div>\n",
+				array(
+					array('pre' => array()),
+						array('code' => array()),
+							'&lt;div&gt;' .
+								'&lt;b&gt;Some text&lt;b&gt;'.
+							'&lt;/div&gt;',
+						//'/code',
+					//'/pre'
+				)
+			), */
+			'code_inline' => array(
+				'inline `%s` stuff',
+				array(
+					array('p' => array()),
+						'inline ',
+						array('code' => array()),
+							'Some text',
+						'/code',
+						' stuff',
+					'/p'
+				)
+			),
+			'code literal backtick' => array(
+				'%s `` ` ``',
+				array(
+					array('p' => array()),
+						'Some text ',
+						array('code' => array()),
+							'`',
+						'/code',
+					'/p'
+				)
+			),
+			'code with backtick' => array(
+				'%s `` `some code` ``',
+				array(
+					array('p' => array()),
+						'Some text ',
+						array('code' => array()),
+							'`some code`',
+						'/code',
+					'/p'
+				)
+			),
+			'code escape' => array(
+				'`&#8212;` is the decimal-encoded equivalent of `&mdash;`.',
+				array(
+					array('p' => array()),
+						array('code' => array()),
+							'&amp;#8212;',
+						'/code',
+						' is the decimal-encoded equivalent of ',
+						array('code' => array()),
+							'&amp;mdash;',
+						'/code',
+						'.',
 					'/p'
 				)
 			)
